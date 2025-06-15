@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>History Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <a href="https://github.com/SvetoslavIvanov98/quiz-app" target="_blank" id="github-link">
+        View on GitHub
+    </a>
     <div id="quiz-container"></div>
     <script>
         let questions = [];
         let score = 0;
-        let answered = 0;
+        let current = 0;
 
-        function showAllQuestions() {
-            let html = '';
-            questions.forEach((q, idx) => {
-                html += `<div class="question-block" id="q${idx}">
+        function showQuestion(idx) {
+            const q = questions[idx];
+            let html = `
+                <div class="question-progress">
+                    Въпрос ${idx + 1} от ${questions.length}
+                </div>
+                <div class="question-block" id="q${idx}">
                     <h2>${q.question}</h2>
                     <ul>`;
-                q.options.forEach(opt => {
-                    html += `<li><button onclick="answer(${idx}, '${opt}')" id="btn${idx}_${opt}">${opt}</button></li>`;
-                });
-                html += `</ul></div>`;
+            q.options.forEach(opt => {
+                html += `<li><button onclick="answer(${idx}, '${opt}')" id="btn${idx}_${opt}">${opt}</button></li>`;
             });
+            html += `</ul></div>`;
             html += `<div id="result"></div>`;
-            html += `<button style="display:none" id="retakeBtn" onclick="retakeQuiz()">Retake Quiz</button>`;
             document.getElementById('quiz-container').innerHTML = html;
         }
 
@@ -32,31 +37,36 @@
             const q = questions[qIdx];
             const buttons = document.querySelectorAll(`#q${qIdx} button`);
             buttons.forEach(btn => btn.disabled = true);
-            // Use robust comparison for answers
             if (opt.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase()) {
                 score++;
                 document.getElementById(`q${qIdx}`).style.background = "rgba(200,255,200,0.5)";
             } else {
                 document.getElementById(`q${qIdx}`).style.background = "rgba(255,200,200,0.5)";
             }
-            answered++;
-            if (answered === questions.length) {
-                document.getElementById('result').innerHTML = `<h2>Your score: ${score} от ${questions.length}</h2>`;
-                document.getElementById('retakeBtn').style.display = 'inline-block';
-            }
+            setTimeout(() => {
+                current++;
+                if (current < questions.length) {
+                    showQuestion(current);
+                } else {
+                    document.getElementById('quiz-container').innerHTML = `
+                        <h2>Your score: ${score} от ${questions.length}</h2>
+                        <button id="retakeBtn" onclick="retakeQuiz()">Retake Quiz</button>
+                    `;
+                }
+            }, 800);
         }
 
         function retakeQuiz() {
             score = 0;
-            answered = 0;
-            showAllQuestions();
+            current = 0;
+            showQuestion(current);
         }
 
         fetch('/questions')
             .then(res => res.json())
             .then(data => {
                 questions = data;
-                showAllQuestions();
+                showQuestion(current);
             });
     </script>
 </body>
