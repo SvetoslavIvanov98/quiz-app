@@ -17,7 +17,7 @@ A simple, interactive web-based History Quiz built with Python and Flask. Test y
 1. **Clone the repository:**
    ```sh
    git clone https://github.com/SvetoslavIvanov98/quiz-app.git
-   cd history-quiz
+   cd quiz-app
    ```
 
 2. **Create a virtual environment (optional but recommended):**
