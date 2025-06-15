@@ -12,6 +12,8 @@ A simple, interactive web-based History Quiz built with Python and Flask. Test y
 
 ## Installation
 
+### Local Installation
+
 1. **Clone the repository:**
    ```sh
    git clone https://github.com/yourusername/history-quiz.git
@@ -39,6 +41,32 @@ A simple, interactive web-based History Quiz built with Python and Flask. Test y
    http://localhost:5000
    ```
 
+---
+
+### Docker Installation
+
+1. **Navigate to the Docker directory:**
+   ```sh
+   cd Docker
+   ```
+
+2. **Build the Docker image:**
+   ```sh
+   docker build -t history-quiz .
+   ```
+
+3. **Run the Docker container:**
+   ```sh
+   docker run -p 5000:5000 history-quiz
+   ```
+
+4. **Open your browser and go to:**
+   ```
+   http://localhost:5000
+   ```
+
+---
+
 ## Project Structure
 
 ```
@@ -48,8 +76,11 @@ history-quiz/
 ├── static/
 │   ├── history-bg.jpg
 │   └── style.css
-└── templates/
-    └── index.html
+├── templates/
+│   └── index.html
+└── Docker/
+    ├── Dockerfile
+    └── .dockerignore
 ```
 
 ## Customization
